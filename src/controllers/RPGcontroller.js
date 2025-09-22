@@ -3,12 +3,38 @@ const { sistemas } = dados;
 
 const getAllSistemas = (req, res) => {
     let resultado = sistemas
+ const { sistema, mestre, nivel, status } = req.query;
+
+    if (sistema) {
+        resultado = resultado.filter(s => 
+            s.cenario.toLowerCase().includes(sistema.toLowerCase())
+        );
+    }
+
+    if (mestre) {
+        resultado = resultado.filter(s => 
+            s.mestre.toLowerCase().includes(mestre.toLowerCase())
+        );
+    }
+
+    if (nivel) {
+        resultado = resultado.filter(s => 
+            s.nivel == parseInt(nivel)
+        );
+    }
+
+    if (status) {
+        resultado = resultado.filter(s => 
+            s.status.toLowerCase().includes(status.toLowerCase())
+        );
+    }
+
 
     res.status(200).json({
         total: resultado.length,
         data: resultado
     });
-}
+};
 
 const getSistemasById = (req, res) => {
     const id = parseInt(req.params.id);
@@ -25,7 +51,7 @@ const getSistemasById = (req, res) => {
         total: sistema.length,
         data: sistema
     })
-}
+};
 
 const createSistema = (req, res) => {
     const { sistema, cenario, mestre, jogadores, nivel, sessoes, proximaData } = req.body;
@@ -84,6 +110,7 @@ const createSistema = (req, res) => {
         nivel,
         sessoes,
         proximaData: new Date(),
+
     }
 
     sistemas.push(novoSistema);
@@ -94,7 +121,7 @@ const createSistema = (req, res) => {
         data: novaMonster
     })
 
-}
+};
 
 const deleteSistema = (req, res) => {
     const { id } = req.params
@@ -128,7 +155,7 @@ const deleteSistema = (req, res) => {
         message: "O sistema foi removido com sucesso!"
     })
 
-}
+};
 
 const updateSistema = (req, res) => {
     const id = parseInt(req.params.id);
@@ -155,9 +182,50 @@ const updateSistema = (req, res) => {
     if (jogadores < 2) {
         return res.status(400).json({
             success: false,
-            message: "O numero de jogadores deve ser igual ou superior a 20."
+            message: "O numero de jogadores deve ser igual ou superior a 2."
         })
     } 
-}
 
-export { getAllSistemas, getSistemasById, createSistema }
+        if (jogadores > 8) {
+        return res.status(400).json({
+            success: false,
+            message: "O numero de jogadores deve ser igual ou inferior a 8."
+        })
+    } 
+
+        if (nivel > 20) {
+        return res.status(400).json({
+            success: false,
+            message: "O numero de jogadores deve ser igual ou inferior a 20."
+        })
+    } 
+
+        const monsterAtualizados = sistemas.map(monster =>
+        sistema.id === id
+            ? {
+                ...sistema,
+                ...(sistema && { sistema }),
+                ...(cenario && { cenario }),
+                ...(mestre && { mestre }),
+                ...(jogadores && { jogadores }),
+                ...(nivel && { nivel }),
+                ...(sessoes && { sessoes }),
+            }
+            : sistema
+
+        );
+
+                sistemas.splice(0, sistemas.length, ...sistemasAtualizados);
+
+    const sistemasAtualizados = sistemas.find(m => m.id === id);
+
+    res.status(200).json({
+        success: true,
+        message: "sistema atualizado com sucesso",
+        monstro: sistemasAtualizados
+    })
+
+};
+
+
+export { getAllSistemas, getSistemasById, createSistema, deleteSistema, updateSistema }
