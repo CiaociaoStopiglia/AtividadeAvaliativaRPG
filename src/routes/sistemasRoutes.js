@@ -1,8 +1,9 @@
 import express from "express";
-import { getAllSistemas, getSistemaById } from "../controllers/RPGcontroller.js";
+import { createSistema, getAllSistemas, getSistemasById } from "../controllers/RPGcontroller.js";
 
 const router = express.Router();
 router.get("/", getAllSistemas);
-router.get("/:id", getSistemaById);
+router.get("/:id", getSistemasById);
+router.post("/", createSistema);
 
 export default router;

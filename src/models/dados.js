@@ -1,4 +1,4 @@
-const rpgCampaigns = [
+const sistemas = [
     {
         id: 1,
         sistema: "Dungeons & Dragons 5e",
@@ -56,4 +56,4 @@ const rpgCampaigns = [
     }
 ];
 
-export default { rpgCampaigns };
+export default { sistemas };
